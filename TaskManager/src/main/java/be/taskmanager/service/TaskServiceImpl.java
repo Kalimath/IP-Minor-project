@@ -1,53 +1,55 @@
 package be.taskmanager.service;
 
-import be.taskmanager.domain.Task;
-import be.taskmanager.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import be.taskmanager.domain.Task;
+import be.taskmanager.dto.TaskDTO;
+import be.taskmanager.repository.TaskRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-	private final TaskRepository repository;
+
+	private final TaskRepository taskRepository;
 
 	@Autowired
 	public TaskServiceImpl(TaskRepository repository) {
-		this.repository = repository;
+		this.taskRepository = repository;
+	}
+
+
+	@Override
+	public List<TaskDTO> getTasks() {
+
+		return taskRepository.findAll().stream().map(t ->
+		{
+			TaskDTO dto = new TaskDTO();
+			dto.setDescription(t.getDesc());
+			dto.setName(t.getTitle());
+			dto.setTasks(t.getTasks());
+			dto.setTime(t.getDeadline());
+			return dto;
+
+		}).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Task> getTasks() {
-		return repository.getTasks();
+	public TaskDTO getTask(int id) {
+		return getTasks().get(id);
 	}
 
 	@Override
-	public Task getTask(int id){
-		return repository.getTask(id);
+	@Transactional
+	public void addTask(TaskDTO task) {
+		Task task1 = new Task();
+		task1.setDesc(task.getDescription());
+		task1.setTitle(task.getName());
+		task1.setDeadline(task.getTime());
+		taskRepository.save(task1);
 	}
 
-	@Override
-	public void addTask(Task task){
-		repository.addTask(task);
-	}
 
-	@Override
-	public void editTask(Task task){
-		repository.update(task);
-	}
-
-	@Override
-	public void addSubTask(int mainTaskId, Task task){
-		repository.addSubTask(mainTaskId, task);
-	}
-
-	@Override
-	public List<Task> getSubTasks(int id){
-		return repository.getSublist(id);
-	}
-
-	/*@Override
-	public void addRestaurant(RestaurantDTO restaurantDTO) {
-		Task task = new Task(restaurantDTO.getName(), restaurantDTO.getAddress());
-		repository.addRestaurant(task);
-	}*/
 }

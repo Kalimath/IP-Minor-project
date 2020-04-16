@@ -1,21 +1,16 @@
 package be.taskmanager.service;
 
+
 import be.taskmanager.domain.Task;
+import be.taskmanager.dto.TaskDTO;
 
 import java.util.List;
 
 public interface TaskService {
-	public List<Task> getTasks();
 
-	Task getTask(int id);
+	List<TaskDTO> getTasks();
 
-	void addTask(Task task);
+	void addTask (TaskDTO task);
 
-	void editTask(Task task);
-
-	void addSubTask(int mainTaskId, Task task);
-
-	List<Task> getSubTasks(int id);
-
-//	void addRestaurant(RestaurantDTO restaurantDTO);
+	TaskDTO getTask(int id);
 }
