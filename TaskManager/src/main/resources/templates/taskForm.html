@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>new task form</title>
+</head>
+<body>
+<header style="margin-left: 10%">
+    <h1>New task</h1>
+</header>
+<main style="margin-left: 10%">
+    <form action="*" th:action="@{/tasks/newTask}"  method="post">
+        <fieldset>
+
+            <p class="row">Title:
+            <div class="col-75"><input type="text" name="title"></div>
+            </p>
+
+            <p class="row">Description:
+            <div class="col-75"><input type="text" name="desc"></div>
+            </p>
+
+            <p class="row">Due moment:
+            <div class="col-75"><input type="datetime-local" name="deadline"></div>
+            </p>
+
+            <input type="submit" value="Add" id="submit">
+
+        </fieldset>
+    </form>
+</main>
+
+</body>
+</html>
