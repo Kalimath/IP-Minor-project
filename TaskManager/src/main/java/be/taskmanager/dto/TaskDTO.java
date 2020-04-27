@@ -1,55 +1,53 @@
 package be.taskmanager.dto;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import javax.validation.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class TaskDTO {
 
-    private String description;
-    private String name;
-    ArrayList<TaskDTO> tasks;
+    private String desc;
+    private String title;
+    ArrayList<SubTaskDTO> subTasks;
 
-    @NotEmpty
+    @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    public LocalDateTime time;
+    public LocalDateTime deadline;
 
-    public String getDescription() {
-        return description;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public ArrayList<TaskDTO> getTasks() {
-        return tasks;
+    public ArrayList<SubTaskDTO> getSubTasks() {
+        return subTasks;
     }
 
-    public void setTasks(ArrayList<TaskDTO> tasks) {
-        this.tasks = tasks;
+    public void setSubTasks(ArrayList<SubTaskDTO> subTasks) {
+        this.subTasks = subTasks;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getDeadline() {
+        return deadline;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
     }
 
-    public void addSubTask(TaskDTO task)
-    {
-        tasks.add(task);
-    }
+
 }
 

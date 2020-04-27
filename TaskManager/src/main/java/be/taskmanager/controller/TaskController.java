@@ -1,11 +1,14 @@
 package be.taskmanager.controller;
 
 import be.taskmanager.domain.Task;
+import be.taskmanager.domain.TaskI;
+import be.taskmanager.dto.SubTaskDTO;
 import be.taskmanager.dto.TaskDTO;
 import be.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -32,27 +35,33 @@ public class TaskController {
 			model.addAttribute("task", "Task not found");
 		}else{
 			model.addAttribute("task", task);
-			model.addAttribute("subTasks", task.getTasks());
+			model.addAttribute("subTasks", task.getSubTasks());
 		}
 		return "task";
 	}
 
 	@RequestMapping("/new")
 	public String getTaskForm(Model model){
+		model.addAttribute("task", new Task());
 		return "taskForm";
 	}
 
 
 
 	@PostMapping("/newTask")
-	public String addTask(@ModelAttribute TaskDTO task){
-		taskService.addTask(task);
-		return "redirect:/tasks";
+	public String addTask(@ModelAttribute TaskI task, BindingResult bindingResult){
+		if(bindingResult.hasErrors()){
+			return "taskform";
+		}else{
+			taskService.addTask((TaskDTO) task);
+			return "redirect:/tasks";
+		}
+
 	}
 
 	@RequestMapping("/edit/{id}")
 	public String getTaskToEdit(@PathVariable int id, Model model){
-		TaskDTO task = taskService.getTask(id);
+		TaskI task = (TaskI) taskService.getTask(id);
 		if(task==null){
 			model.addAttribute("task", "Task not found");
 		}else{
@@ -63,18 +72,18 @@ public class TaskController {
 	}
 
 	@PostMapping("/editTask")
-	public String editTask(@ModelAttribute Task task){
-		taskService.getTask(editTask).setName(task.getTitle());
-		taskService.getTask(editTask).setDescription(task.getDesc());
-		taskService.getTask(editTask).setTime(task.getDeadline());
+	public String editTask(@ModelAttribute TaskI task){
+		taskService.getTask(editTask).setTitle(task.getTitle());
+		taskService.getTask(editTask).setDesc(task.getDesc());
+		taskService.getTask(editTask).setDeadline(task.getDeadline());
 		return "redirect:/tasks/"+editTask;
 //		return "redirect:/tasks/"+(task.getId()-1);
 	}
 
 	@RequestMapping("/{id}/sub/create")
 	public String createSubTask(@PathVariable("id") int id, Model model){
-		TaskDTO task = taskService.getTask(id);
-		Task subTask = new Task();
+		TaskI task = (TaskI) taskService.getTask(id);
+		TaskI subTask = new Task();
 		if(task==null){
 			model.addAttribute("taskId", "Task not found");
 		}else{
@@ -85,9 +94,9 @@ public class TaskController {
 	}
 
 	@PostMapping("/addSubTask/{id}")
-	public String addSubTask(@PathVariable int id, @ModelAttribute TaskDTO task, Model model){
-		taskService.getTask(id).addSubTask(task);
-		System.out.println(task.getName());
+	public String addSubTask(@PathVariable int id, @ModelAttribute SubTaskDTO task, Model model){
+		taskService.addSubTask(id,task);
+		System.out.println(task.getTitle());
 		return "redirect:/tasks/"+id;
 	}
 

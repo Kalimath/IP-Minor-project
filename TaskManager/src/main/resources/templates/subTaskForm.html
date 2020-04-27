@@ -16,28 +16,17 @@
         <h2 th:case="'Task not found'" style="color: red">Task not found</h2>
 
         <div th:case="*">
-            <form action="*" th:action="@{/tasks/addSubTask/{id}(id=${taskId})}" method="post">
-                <fieldset>
+            <form action="*" th:action="@{/tasks/addSubTask/{id}(id=${taskId})}" th:object="${subtask}" method="post">
+                <label for="name">name:</label><br>
+                <input type="text" th:field="*{title}" id="name" name="name"><br>
 
-                    <p class="row">Title:
-                    <div class="col-75"><input type="text" name="title"></div>
-                    </p>
+                <label for="description">description:</label><br>
+                <input type="text" th:field="*{desc}" id="description" name="description"><br>
 
-                    <p class="row">Description:
-                    <div class="col-75"><input type="text" name="desc"></div>
-                    </p>
-
-                    <p class="row">Due moment:
-                    <div class="col-75"><input type="datetime-local" name="deadline"></div>
-                    </p>
-
-                    <p class="row" hidden>main task id:
-                    <div class="col-75" hidden><input type="number" name="taskId" ></div>
-                    </p>
+                <label for="time">Due date:</label><br>
+                <input type="datetime-local" th:field="*{deadline}" id="time"><br>
 
                     <input type="submit" value="Add" id="submit">
-
-                </fieldset>
             </form>
         </div>
     </div>
